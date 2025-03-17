@@ -1,4 +1,4 @@
-# user-service (prod)
+# user-service prod
 server:
   port: 8080
 
