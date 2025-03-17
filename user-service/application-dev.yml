@@ -1,0 +1,12 @@
+# user-service dev
+server:
+  port: 8081
+
+database:
+  url: jdbc:postgresql://localhost:5432/users_dev
+  username: dev-user
+  password: dev-secret-password
+
+feature-flags:
+  enable-experimental-api: true
+  cache-ttl: 30s
