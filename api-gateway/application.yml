@@ -4,17 +4,29 @@ server:
 spring:
   application:
     name: api-gateway
-
   cloud:
     gateway:
       discovery:
-        locator:
-          enabled: true
-
+        locator: true
       routes:
+        # User Service
         - id: user-service
-          uri: lb://user-service
+          uri: lb://USER-SERVICE
           predicates:
-            - Path=/users/**
+            - Path=/api/auth/**
+            - Path=/api/users/**
+            - Path=/api/permissions/**
           filters:
-            - RewritePath=/users/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
+
+        # Board Service
+        - id: board-service
+          uri: lb://BOARD-SERVICE
+          predicates:
+            - Path=/api/boards/**
+            - Path=/api/columns/**
+          filters:
+            - StripPrefix=1
+
+    loadbalancer:
+      enabled: true
