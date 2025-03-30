@@ -1,8 +1,5 @@
 server:
   port: 8081
-spring:
-  profiles:
-    default: dev
 app:
   jwt:
     access-token-expiration: 15m
