@@ -4,3 +4,15 @@ app:
   jwt:
     access-token-expiration: 15m
     refresh-token-expiration: 7d
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_JDBC_URL:localhost:5432}/${DATABASE_NAME:user_service_db}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      format_sql: true
+      jdbc.lob.non_contextual_creation: true
