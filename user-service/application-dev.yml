@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://$(POSTGRES_JDBC_URL:localhost:5432)/$(DATABASE_NAME:user_service_db)
+    username: $(POSTGRES_USER:admin)
+    password: $(POSTGRES_USER:admin)
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      format_sql: true
+      jdbc.lob.non_contextual_creation: true
+
+app:
+  jwt:
+    secret: your-256-bit-secret-key-here
+
+cors:
+  allowed-origins: "http://localhost:3000" # TODO change to env var later
+  allowed-methods: "GET,POST,PUT,DELETE"
+  allowed-headers: "Authorization,Content-Type"

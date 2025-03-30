@@ -1,0 +1,6 @@
+logging:
+  level:
+    root: INFO
+    org.springframework.web: WARN
+    ru.projektio.userservice: WARN
+    # ADD ALL SERVICES
