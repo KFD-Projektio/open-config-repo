@@ -17,7 +17,7 @@ spring:
             - Path=/api/users/**
             - Path=/api/permissions/**
           filters:
-            - RewritePath=/users/(?<segment>.*), /$\{segment}
+            - RewritePath=/auth/(?<segment>.*), /$\{segment}
 
         # Board Service
         - id: board-service
