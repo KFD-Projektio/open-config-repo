@@ -1,7 +1,7 @@
 spring:
   datasource:
-    username: $(POSTGRES_USER:admin)
-    password: $(POSTGRES_PASS:admin)
+    username: ${POSTGRES_USER:admin}
+    password: ${POSTGRES_PASS:admin}
 
 app:
   jwt:
