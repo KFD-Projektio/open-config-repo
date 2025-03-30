@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://$(POSTGRES_JDBC_URL:localhost:5432)/$(DATABASE_NAME:user_service_db)
+    url: jdbc:postgresql://${POSTGRES_JDBC_URL:localhost:5432}/${DATABASE_NAME:user_service_db}
     username: $(POSTGRES_USER:admin)
-    password: $(POSTGRES_USER:admin)
+    password: $(POSTGRES_PASS:admin)
     driver-class-name: org.postgresql.Driver
 
   jpa:
