@@ -6,6 +6,5 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASS}
 
-app:
-  jwt:
-    secret: top-secret-256-bit-key-ever-existed
+jwt:
+  secret: top-secret-256-bit-key-ever-existed

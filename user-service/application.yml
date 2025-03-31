@@ -1,9 +1,9 @@
 server:
   port: 8081
-app:
-  jwt:
-    access-token-expiration: 15m
-    refresh-token-expiration: 7d
+
+jwt:
+  access-token-expiration: 3600000
+  refresh-token-expiration: 86400000
 
 spring:
   datasource:
