@@ -15,7 +15,7 @@ spring:
           predicates:
             - Path=/api/auth/**
           filters:
-            - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
         # Board Service
         - id: board-service
