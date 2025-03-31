@@ -29,3 +29,8 @@ spring:
 
     loadbalancer:
       enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE # Основные логи маршрутизации
+    reactor.netty.http.client: DEBUG # Логи HTTP клиента
