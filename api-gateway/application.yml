@@ -13,7 +13,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/api/auth/**
+            - Path=/api/auth/**,/api/users/**
           filters:
             - StripPrefix=1
 
@@ -28,8 +28,3 @@ spring:
 
     loadbalancer:
       enabled: true
-
-logging:
-  level:
-    org.springframework.cloud.gateway: TRACE # Основные логи маршрутизации
-    reactor.netty.http.client: DEBUG # Логи HTTP клиента
