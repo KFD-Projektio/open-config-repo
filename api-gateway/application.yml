@@ -42,7 +42,3 @@ spring:
     loadbalancer:
       enabled: true
       
-spring:
-  cloud:
-    gateway:
-      
