@@ -6,6 +6,19 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000/"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
       discovery:
         locator: false
       routes:
@@ -28,3 +41,8 @@ spring:
 
     loadbalancer:
       enabled: true
+      
+spring:
+  cloud:
+    gateway:
+      
