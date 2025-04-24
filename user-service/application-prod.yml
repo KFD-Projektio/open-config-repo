@@ -5,6 +5,5 @@ spring:
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASS}
-
-jwt:
-  secret: top-secret-256-bit-key-ever-existed
+# jwt:
+#   secret: top-secret-256-bit-key-ever-existed
