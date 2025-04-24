@@ -6,4 +6,4 @@ logging:
     ru.projektio.apigateway: DEBUG
 
 jwt:
-  publicRsaKey: classpath:dev-keys/public.txt
+  publicRsaFile: classpath:dev-keys/public.txt

@@ -8,7 +8,7 @@ spring:
     gateway:
       globalcors:
         cors-configurations:
-          '[/**]':
+          "[/**]":
             allowedOrigins: "http://localhost:3000/"
             allowedMethods:
               - GET
@@ -35,12 +35,10 @@ spring:
         - id: board-service
           uri: lb://BOARD-SERVICE
           predicates:
-            - Path=/api/boards/**
-            - Path=/api/columns/**
+            - Path=/api/boards/**,/api/columns/**
           filters:
             - RemoveRequestHeader=X-User-Id
             - StripPrefix=1
 
     loadbalancer:
       enabled: true
-      
