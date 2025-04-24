@@ -28,6 +28,7 @@ spring:
           predicates:
             - Path=/api/auth/**,/api/users/**
           filters:
+            - RemoveRequestHeader=X-User-Id
             - StripPrefix=1
 
         # Board Service
@@ -37,6 +38,7 @@ spring:
             - Path=/api/boards/**
             - Path=/api/columns/**
           filters:
+            - RemoveRequestHeader=X-User-Id
             - StripPrefix=1
 
     loadbalancer:

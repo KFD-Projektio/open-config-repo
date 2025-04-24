@@ -4,7 +4,7 @@ spring:
     password: ${POSTGRES_PASS:admin}
 
 jwt:
-  secret: super-duper-mega-sercret-256-bit-secret-key-here
+  privateRsaKey: classpath:dev-keys/private.txt
 
 cors:
   allowed-origins: "http://localhost:3000" # TODO change to env var later

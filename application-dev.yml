@@ -1,6 +1,9 @@
 logging:
   level:
-    root: INFO
+    root: DEBUG
     org.springframework.web: DEBUG
     ru.projektio.userservice: DEBUG
-    # ADD ALL SERVICES
+    ru.projektio.apigateway: DEBUG
+
+jwt:
+  publicRsaKey: classpath:dev-keys/public.txt
