@@ -1,9 +1,2 @@
-logging:
-  level:
-    root: DEBUG
-    org.springframework.web: DEBUG
-    ru.projektio.userservice: DEBUG
-    ru.projektio.apigateway: DEBUG
-
 jwt:
   publicRsaFile: classpath:dev-keys/public.txt
