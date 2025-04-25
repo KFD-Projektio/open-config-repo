@@ -1,11 +1,13 @@
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_JDBC_URL:localhost:5432}/${DATABASE_NAME:board_service}
-    username: ${POSTGRES_USERNAME:postgres}
-    password: ${POSTGRES_PASSWORD:1337}
+    username: ${POSTGRES_USERNAME:admin}$
+    password: ${POSTGRES_PASSWORD:admin}$
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 8082

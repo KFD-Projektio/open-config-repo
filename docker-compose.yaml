@@ -1,0 +1,137 @@
+services:
+  kfd-config-server:
+    image: stannisl/kfd-config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - kfd-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  kfd-discovery-service:
+    image: stannisl/kfd-discovery-service
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    environment:
+      - CONFIG_SERVER_URI=http://kfd-config-server:8888
+    networks:
+      - kfd-network
+    depends_on:
+      kfd-config-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  kdf-api-gateway:
+    image: stannisl/kfd-api-gateway
+    container_name: api-gateway
+    environment:
+      - CONFIG_SERVER_URI=http://kfd-config-server:8888
+      - DISCOVERY_SERVER_URI=http://kfd-discovery-service:8761/eureka
+    ports:
+      - "8080:8080"
+    depends_on:
+      kfd-discovery-service:
+        condition: service_healthy
+    networks:
+      - kfd-network
+
+  # kfd-postgres:
+  #   image: postgres:latest
+  #   container_name: kfd-postgres-db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_USER: ${USER_SERVICE_LOGIN}
+  #     POSTGRES_PASSWORD: ${USER_SERVICE_PASS}
+  #     POSTGRES_DB: user_service_db
+  #     DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
+  #   networks:
+  #     - kfd-network
+  #   healthcheck:
+  #     test:
+  #       ["CMD-SHELL", "pg_isready -U $${USER_SERVICE_LOGIN} -d user_service_db"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+
+  kfd-postgres:
+    image: postgres:latest
+    container_name: kfd-postgres-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    networks:
+      - kfd-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${USER_SERVICE_LOGIN}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kfd-user-service:
+    image: stannisl/kfd-user-service
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      CONFIG_SERVER_URI: http://kfd-config-server:8888
+      POSTGRES_USER: admin
+      POSTGRES_PASS: admin
+      DATABASE_NAME: user_service_db
+      POSTGRES_JDBC_URL: kfd-postgres:5432
+      DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
+    networks:
+      - kfd-network
+    depends_on:
+      kfd-discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # kfd-board-service:
+  #   image: stannisl/kfd-board-service
+  #   container_name: board-service
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     CONFIG_SERVER_URI: http://kfd-config-server:8888
+  #     POSTGRES_USER: ${USER_SERVICE_LOGIN}
+  #     POSTGRES_PASS: ${USER_SERVICE_PASS}
+  #     DATABASE_NAME: board_service
+  #     POSTGRES_JDBC_URL: kfd-postgres:5432
+  #     DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
+  #   networks:
+  #     - kfd-network
+  #   depends_on:
+  #     kfd-discovery-service:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 10
+
+networks:
+  kfd-network:
+    driver: bridge
+
+volumes:
+  pgdata:
