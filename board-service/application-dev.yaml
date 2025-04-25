@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_JDBC_URL:localhost:5432}/${DATABASE_NAME:board_service}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:1337}
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+server:
+  port: 8082
