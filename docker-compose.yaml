@@ -1,3 +1,7 @@
+x-postgres-vars: &postgres-vars
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin
+
 services:
   kfd-config-server:
     build: ../config-server
@@ -76,12 +80,11 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      <<: *postgres-vars
     networks:
       - kfd-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "psql -U admin -d board_service_db -c 'SELECT 1'"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -94,8 +97,7 @@ services:
       - "8081:8081"
     environment:
       CONFIG_SERVER_URI: http://kfd-config-server:8888
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASS: ${POSTGRES_PASSWORD}
+      <<: *postgres-vars
       DATABASE_NAME: user_service_db
       POSTGRES_JDBC_URL: kfd-postgres:5432
       DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
@@ -105,7 +107,7 @@ services:
       kfd-discovery-service:
         condition: service_healthy
       kfd-postgres:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
       interval: 10s
@@ -120,8 +122,7 @@ services:
      - "8082:8082"
     environment:
       CONFIG_SERVER_URI: http://kfd-config-server:8888
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASS: ${POSTGRES_PASSWORD}
+      <<: *postgres-vars
       DATABASE_NAME: board_service_db
       POSTGRES_JDBC_URL: kfd-postgres:5432
       DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
@@ -131,7 +132,7 @@ services:
       kfd-discovery-service:
         condition: service_healthy
       kfd-postgres:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
       interval: 10s
