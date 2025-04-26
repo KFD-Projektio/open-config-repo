@@ -1,6 +1,7 @@
 services:
   kfd-config-server:
-    image: stannisl/kfd-config-server
+    build: ../config-server
+    image: config-server:latest
     container_name: config-server
     ports:
       - "8888:8888"
@@ -13,7 +14,8 @@ services:
       retries: 10
 
   kfd-discovery-service:
-    image: stannisl/kfd-discovery-service
+    build: ../discovery-server
+    image: discovery-server:latest
     container_name: discovery-service
     ports:
       - "8761:8761"
@@ -30,7 +32,8 @@ services:
       timeout: 5s
       retries: 10
   kdf-api-gateway:
-    image: stannisl/kfd-api-gateway
+    build: ../api-gateway
+    image: api-gateway:latest
     container_name: api-gateway
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
@@ -78,20 +81,21 @@ services:
     networks:
       - kfd-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${USER_SERVICE_LOGIN}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   kfd-user-service:
-    image: stannisl/kfd-user-service
+    build: ../user-microservice
+    image: user-microservice:latest
     container_name: user-service
     ports:
       - "8081:8081"
     environment:
       CONFIG_SERVER_URI: http://kfd-config-server:8888
-      POSTGRES_USER: admin
-      POSTGRES_PASS: admin
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASSWORD}
       DATABASE_NAME: user_service_db
       POSTGRES_JDBC_URL: kfd-postgres:5432
       DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
@@ -100,34 +104,39 @@ services:
     depends_on:
       kfd-discovery-service:
         condition: service_healthy
+      kfd-postgres:
+        condition: service_started
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 10
 
-  # kfd-board-service:
-  #   image: stannisl/kfd-board-service
-  #   container_name: board-service
-  #   ports:
-  #     - "8082:8082"
-  #   environment:
-  #     CONFIG_SERVER_URI: http://kfd-config-server:8888
-  #     POSTGRES_USER: ${USER_SERVICE_LOGIN}
-  #     POSTGRES_PASS: ${USER_SERVICE_PASS}
-  #     DATABASE_NAME: board_service
-  #     POSTGRES_JDBC_URL: kfd-postgres:5432
-  #     DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
-  #   networks:
-  #     - kfd-network
-  #   depends_on:
-  #     kfd-discovery-service:
-  #       condition: service_healthy
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 10
+  kfd-board-service:
+    build: ../board-microservice
+    image: board-microservice:latest
+    container_name: board-service
+    ports:
+     - "8082:8082"
+    environment:
+      CONFIG_SERVER_URI: http://kfd-config-server:8888
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: board_service_db
+      POSTGRES_JDBC_URL: kfd-postgres:5432
+      DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
+    networks:
+      - kfd-network
+    depends_on:
+      kfd-discovery-service:
+        condition: service_healthy
+      kfd-postgres:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 networks:
   kfd-network:
