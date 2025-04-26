@@ -4,8 +4,8 @@ x-postgres-vars: &postgres-vars
 
 services:
   kfd-config-server:
-    build: ../config-server
-    image: config-server:latest
+    # build: ../config-server
+    image: stannisl/kfd-config-server:latest
     container_name: config-server
     ports:
       - "8888:8888"
@@ -18,8 +18,8 @@ services:
       retries: 10
 
   kfd-discovery-service:
-    build: ../discovery-server
-    image: discovery-server:latest
+    # build: ../discovery-server
+    image: stannisl/kfd-discovery-server:latest
     container_name: discovery-service
     ports:
       - "8761:8761"
@@ -36,8 +36,8 @@ services:
       timeout: 5s
       retries: 10
   kdf-api-gateway:
-    build: ../api-gateway
-    image: api-gateway:latest
+    # build: ../api-gateway
+    image: stannisl/kfd-api-gateway:latest
     container_name: api-gateway
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
@@ -90,8 +90,8 @@ services:
       retries: 5
 
   kfd-user-service:
-    build: ../user-microservice
-    image: user-microservice:latest
+    # build: ../user-microservice
+    image: stannisl/kfd-user-service:latest
     container_name: user-service
     ports:
       - "8081:8081"
@@ -115,11 +115,11 @@ services:
       retries: 10
 
   kfd-board-service:
-    build: ../board-microservice
-    image: board-microservice:latest
+    # build: ../board-microservice
+    image: stannisl/kfd-board-service:latest
     container_name: board-service
     ports:
-     - "8082:8082"
+      - "8082:8082"
     environment:
       CONFIG_SERVER_URI: http://kfd-config-server:8888
       <<: *postgres-vars
