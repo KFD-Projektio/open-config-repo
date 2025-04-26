@@ -1,2 +1,4 @@
-CREATE DATABASE IF NOT EXISTS board_service_db;
-CREATE DATABASE IF NOT EXISTS user_service_db;
+CREATE DATABASE user_service_db;
+CREATE DATABASE board_service_db;
+GRANT ALL PRIVILEGES ON DATABASE user_service_db TO admin;
+GRANT ALL PRIVILEGES ON DATABASE board_service_db TO admin;
