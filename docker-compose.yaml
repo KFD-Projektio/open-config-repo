@@ -1,8 +1,6 @@
 services:
   kfd-config-server:
-    # build: ../config-server
-    # image: config-server:latest
-    image: stannisl/kfd-config-server:latest
+    image: stannisl/kfd-config-server:f9c8ec2
     container_name: config-server
     ports:
       - "8888:8888"
@@ -16,7 +14,7 @@ services:
 
   kfd-discovery-service:
     # build: ../discovery-server
-    image: stannisl/kfd-discovery-service:latest
+    image: stannisl/kfd-discovery-service:ebd9c36
     container_name: discovery-service
     ports:
       - "8761:8761"
@@ -33,8 +31,8 @@ services:
       timeout: 5s
       retries: 10
   kdf-api-gateway:
-    # build: ../api-gateway
-    image: stannisl/kfd-api-gateway:757d337
+    # image: api-gateway:latest
+    image: stannisl/kfd-api-gateway:d4972a1
     container_name: api-gateway
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
@@ -46,27 +44,6 @@ services:
         condition: service_healthy
     networks:
       - kfd-network
-
-  # kfd-postgres:
-  #   image: postgres:latest
-  #   container_name: kfd-postgres-db
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_USER: ${USER_SERVICE_LOGIN}
-  #     POSTGRES_PASSWORD: ${USER_SERVICE_PASS}
-  #     POSTGRES_DB: user_service_db
-  #     DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
-  #   networks:
-  #     - kfd-network
-  #   healthcheck:
-  #     test:
-  #       ["CMD-SHELL", "pg_isready -U $${USER_SERVICE_LOGIN} -d user_service_db"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 5
 
   kfd-postgres:
     image: postgres:latest
@@ -89,7 +66,7 @@ services:
 
   kfd-user-service:
     # build: ../user-microservice
-    image: stannisl/kfd-user-service:214d42b
+    image: stannisl/kfd-user-service:46f08fd
     container_name: user-service
     ports:
       - "8081:8081"
@@ -115,7 +92,7 @@ services:
 
   kfd-board-service:
     # build: ../board-microservice
-    image: stannisl/kfd-board-service:c4373c5
+    image: stannisl/kfd-board-service:b6f6090
     container_name: board-service
     ports:
       - "8082:8082"
@@ -139,9 +116,58 @@ services:
       timeout: 5s
       retries: 10
 
-networks:
-  kfd-network:
-    driver: bridge
+  kfd-prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - kfd-network
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    depends_on:
+      kfd-config-server:
+        condition: service_healthy
+      kfd-discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  kfd-grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - kfd-network
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_DEFAULT_THEME=light
+    depends_on:
+      kfd-prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
   pgdata:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  kfd-network:
+    driver: bridge

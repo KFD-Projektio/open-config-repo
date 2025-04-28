@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "spring-apps"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets:
+          - "kfd-config-server:8888"
+          - "kfd-discovery-service:8761"
+          - "kdf-api-gateway:8080"
+          - "kfd-user-service:8081"
+          - "kfd-board-service:8082"
