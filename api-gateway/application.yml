@@ -34,12 +34,12 @@ spring:
 
         # Board Service
         - id: board-service
-          uri: lb://BOARD-SERVICE
+          uri: lb://board-service
           predicates:
-            - Path=/api/boards/**,/api/columns/**
+            - Path=/api/v1/boards/**,/api/columns/**
           filters:
             - RemoveRequestHeader=X-User-Id
-            - StripPrefix=1
+            # - StripPrefix=1
             - name: JwtHeaderFilter
 
     loadbalancer:
