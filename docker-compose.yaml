@@ -34,7 +34,7 @@ services:
       retries: 10
   kdf-api-gateway:
     # build: ../api-gateway
-    image: stannisl/kfd-api-gateway:latest
+    image: stannisl/kfd-api-gateway:757d337
     container_name: api-gateway
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
@@ -89,7 +89,7 @@ services:
 
   kfd-user-service:
     # build: ../user-microservice
-    image: stannisl/kfd-user-service:latest
+    image: stannisl/kfd-user-service:214d42b
     container_name: user-service
     ports:
       - "8081:8081"
