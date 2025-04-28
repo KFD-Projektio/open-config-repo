@@ -30,7 +30,7 @@ spring:
           filters:
             - RemoveRequestHeader=X-User-Id
             - StripPrefix=1
-            - name: JwtHeaderFilter
+            # - name: JwtHeaderFilter
 
         # Board Service
         - id: board-service
