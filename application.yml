@@ -21,3 +21,6 @@ management:
     export:
       prometheus:
         enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
