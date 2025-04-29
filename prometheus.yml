@@ -6,8 +6,8 @@ scrape_configs:
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets:
-          - "kfd-config-server:8888"
+          # - "kfd-config-server:8888"
           - "kfd-discovery-service:8761"
           - "kdf-api-gateway:8080"
-          - "kfd-user-service:8081"
+          # - "kfd-user-service:8081"
           - "kfd-board-service:8082"
