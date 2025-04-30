@@ -3,7 +3,6 @@ providers:
   - name: 'default'
     orgId: 1
     folder: 'Spring Cloud'
-    floderUid: 'spring-cloud'
     type: file
     disableDeletion: true 
     updateIntervalSeconds: 30
