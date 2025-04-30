@@ -66,7 +66,7 @@ services:
 
   kfd-user-service:
     # build: ../user-microservice
-    image: stannisl/kfd-user-service:1dfa085
+    image: stannisl/kfd-user-service:f726be9
     container_name: user-service
     ports:
       - "8081:8081"
