@@ -8,4 +8,4 @@ providers:
     disableDeletion: true 
     updateIntervalSeconds: 30
     options:
-      path: /etc/grafana/provisioning/dashboards
+      path: /etc/grafana/provisioning/dashboards/Spring Cloud
