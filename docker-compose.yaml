@@ -66,7 +66,7 @@ services:
 
   kfd-user-service:
     # build: ../user-microservice
-    image: stannisl/kfd-user-service:f726be9
+    image: stannisl/kfd-user-service:0fe0c7f
     container_name: user-service
     ports:
       - "8081:8081"
@@ -92,7 +92,8 @@ services:
 
   kfd-board-service:
     # build: ../board-microservice
-    image: stannisl/kfd-board-service:b6f6090
+    # image: stannisl/kfd-board-service:3629775
+    image: stannisl/kfd-board-service:7e5e5fd
     container_name: board-service
     ports:
       - "8082:8082"
