@@ -44,3 +44,8 @@ spring:
 
     loadbalancer:
       enabled: true
+
+cors:
+  allowed-origins: "http://localhost:3000"
+  allowed-methods: "GET,POST,PUT,DELETE"
+  allowed-headers: "Authorization,Content-Type,X-User-Id"

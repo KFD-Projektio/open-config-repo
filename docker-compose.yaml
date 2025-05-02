@@ -93,7 +93,7 @@ services:
   kfd-board-service:
     # build: ../board-microservice
     # image: stannisl/kfd-board-service:3629775
-    image: stannisl/kfd-board-service:7e5e5fd
+    image: stannisl/kfd-board-service:5fcb3b4
     container_name: board-service
     ports:
       - "8082:8082"
