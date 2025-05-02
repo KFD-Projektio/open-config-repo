@@ -32,7 +32,7 @@ services:
       retries: 10
   kdf-api-gateway:
     # image: api-gateway:latest
-    image: stannisl/kfd-api-gateway:549b310
+    image: stannisl/kfd-api-gateway:11dac71
     container_name: api-gateway
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
@@ -44,6 +44,19 @@ services:
         condition: service_healthy
     networks:
       - kfd-network
+
+  kfd-frontend:
+    image: stannisl/kfd-frontend
+    container_name: kfd-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://kdf-api-gateway:8080/api
+    networks:
+      - kfd-network
+    depends_on:
+      kdf-api-gateway:
+        condition: service_healthy
 
   kfd-postgres:
     image: postgres:latest
@@ -66,7 +79,7 @@ services:
 
   kfd-user-service:
     # build: ../user-microservice
-    image: stannisl/kfd-user-service:0fe0c7f
+    image: stannisl/kfd-user-service:ab0f69c
     container_name: user-service
     ports:
       - "8081:8081"
@@ -93,7 +106,7 @@ services:
   kfd-board-service:
     # build: ../board-microservice
     # image: stannisl/kfd-board-service:3629775
-    image: stannisl/kfd-board-service:5fcb3b4
+    image: stannisl/kfd-board-service:e39edf0
     container_name: board-service
     ports:
       - "8082:8082"
