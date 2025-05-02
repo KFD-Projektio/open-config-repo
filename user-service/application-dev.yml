@@ -31,3 +31,8 @@ jwt:
     kKuTQUMufcNw8rxUw7GLt/l15jO/hmytZwYQ5U8NvgLXSf9ai4T3HwR9azu+5vaB
     I4p1ZMgwr1PzVDNJHE8oFFrPSpVaVJvL7DAIBAPhD5nf8ThCKV3WkpSrlrr4zaFJ
     GFIddOCGONLILAkeDzmBgvTb
+
+cors:
+  allowed-origins: "http://localhost:3000"
+  allowed-methods: "GET,POST,PUT,DELETE"
+  allowed-headers: "Authorization,Content-Type,X-User-Id"
