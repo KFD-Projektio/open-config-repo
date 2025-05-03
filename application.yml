@@ -27,7 +27,4 @@ management:
 
 logging:
   level:
-    ru.projektio.apigateway: TRACE
-    # ru.projektio.apigateway: TRACE
-    # ru.projektio.apigateway: TRACE
-    # ru.projektio.apigateway: TRACE
+    root: TRACE
