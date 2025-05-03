@@ -44,3 +44,6 @@ spring:
 
     loadbalancer:
       enabled: true
+
+cors:
+  allowedOrigins: ${ALLOWED_ORIGIN:*}

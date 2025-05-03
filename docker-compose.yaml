@@ -1,6 +1,6 @@
 services:
   kfd-config-server:
-    image: stannisl/kfd-config-server:b493ea0
+    image: stannisl/kfd-config-server:latest
     container_name: config-server
     ports:
       - "8888:8888"
@@ -14,7 +14,7 @@ services:
 
   kfd-discovery-service:
     # build: ../discovery-server
-    image: stannisl/kfd-discovery-service:ebd9c36
+    image: stannisl/kfd-discovery-service:latest
     container_name: discovery-service
     ports:
       - "8761:8761"
@@ -30,9 +30,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-  kdf-api-gateway:
+  kfd-api-gateway:
     # image: api-gateway:latest
-    image: stannisl/kfd-api-gateway:11dac71
+    image: stannisl/kfd-api-gateway:latest
     container_name: api-gateway
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
@@ -44,7 +44,11 @@ services:
         condition: service_healthy
     networks:
       - kfd-network
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
   kfd-frontend:
     image: stannisl/kfd-frontend
     container_name: kfd-frontend
@@ -55,7 +59,7 @@ services:
     networks:
       - kfd-network
     depends_on:
-      kdf-api-gateway:
+      kfd-api-gateway:
         condition: service_healthy
 
   kfd-postgres:
@@ -79,7 +83,7 @@ services:
 
   kfd-user-service:
     # build: ../user-microservice
-    image: stannisl/kfd-user-service:ab0f69c
+    image: stannisl/kfd-user-service:latest
     container_name: user-service
     ports:
       - "8081:8081"
@@ -106,7 +110,7 @@ services:
   kfd-board-service:
     # build: ../board-microservice
     # image: stannisl/kfd-board-service:3629775
-    image: stannisl/kfd-board-service:e39edf0
+    image: stannisl/kfd-board-service:latest
     container_name: board-service
     ports:
       - "8082:8082"
@@ -158,7 +162,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
