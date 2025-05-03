@@ -24,3 +24,10 @@ management:
   endpoint:
     prometheus:
       enabled: true
+
+logging:
+  level:
+    ru.projektio.apigateway: TRACE
+    # ru.projektio.apigateway: TRACE
+    # ru.projektio.apigateway: TRACE
+    # ru.projektio.apigateway: TRACE

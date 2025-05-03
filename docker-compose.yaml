@@ -37,6 +37,8 @@ services:
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
       - DISCOVERY_SERVER_URI=http://kfd-discovery-service:8761/eureka
+      - ALLOWED_ORIGIN=http://172.19.0.10:3000
+      # - ALLOWED_ORIGIN=*
     ports:
       - "8080:8080"
     depends_on:
