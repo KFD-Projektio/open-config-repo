@@ -32,7 +32,14 @@ spring:
             - RemoveRequestHeader=X-User-Id
             - StripPrefix=1
             # - name: JwtHeaderFilter
-
+        - id: task-service
+          uri: lb://task-service
+          predicates:
+            - Path=/api/tasks/**
+          filters:
+            - RemoveRequestHeader=X-User-Id
+            - StripPrefix=1
+            - name: JwtHeaderFilter
         # Board Service
         - id: board-service
           uri: lb://board-service
