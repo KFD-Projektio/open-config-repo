@@ -109,6 +109,33 @@ services:
       timeout: 5s
       retries: 10
 
+  kfd-task-service:
+    # build: ../board-microservice
+    # image: stannisl/kfd-board-service:3629775
+    image: stannisl/kfd-task-service:latest
+    container_name: task-service
+    ports:
+      - "8083:8083"
+    environment:
+      CONFIG_SERVER_URI: http://kfd-config-server:8888
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: task_service_db
+      POSTGRES_JDBC_URL: kfd-postgres:5432
+      DISCOVERY_SERVER_URI: http://kfd-discovery-service:8761/eureka
+    networks:
+      - kfd-network
+    depends_on:
+      kfd-discovery-service:
+        condition: service_healthy
+      kfd-postgres:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   kfd-board-service:
     # build: ../board-microservice
     # image: stannisl/kfd-board-service:3629775
