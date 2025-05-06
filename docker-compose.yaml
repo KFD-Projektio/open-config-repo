@@ -37,7 +37,8 @@ services:
     environment:
       - CONFIG_SERVER_URI=http://kfd-config-server:8888
       - DISCOVERY_SERVER_URI=http://kfd-discovery-service:8761/eureka
-      - ALLOWED_ORIGIN=http://172.19.0.10:3000
+      # - ALLOWED_ORIGIN=http://172.19.0.10:3000
+      - ALLOWED_ORIGIN=http://kfd-frontend:3000
       # - ALLOWED_ORIGIN=*
     ports:
       - "8080:8080"
@@ -51,11 +52,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
   kfd-frontend:
     image: stannisl/kfd-frontend
     container_name: kfd-frontend
     ports:
-      - "3000:80"
+      - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://kdf-api-gateway:8080/api
     networks:
@@ -131,7 +133,7 @@ services:
       kfd-postgres:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 10
