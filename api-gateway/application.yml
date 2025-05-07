@@ -10,7 +10,7 @@ spring:
         cors-configurations:
           "[/**]":
             # allowedOrigins: "http://localhost:3000/"
-            allowedOrigins: ${ALLOWED_ORIGIN:*}
+            allowedOrigins: http://localhost:3000/, http://172.19.0.11:3000, http://kfd-frontend:3000, http://projektio.ru
             allowedMethods:
               - GET
               - POST
